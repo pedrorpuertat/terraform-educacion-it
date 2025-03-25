@@ -29,16 +29,36 @@ resource "aws_subnet" "subnet-sg" {
   map_public_ip_on_launch = true
 }
 
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.vpc-sg.id
+}
+
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.vpc-sg.id
+}
+
+resource "aws_route" "public_rt_route" {
+  route_table_id         = aws_route_table.public_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.gw.id
+}
+
+resource "aws_route_table_association" "public_rt_assoc" {
+  subnet_id      = aws_subnet.subnet-sg.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
 resource "aws_security_group" "web-sg" {
- vpc_id = aws_vpc.vpc-sg.id
+  vpc_id = aws_vpc.vpc-sg.id
   name = "${random_pet.sg.id}-sg-educacion-it"
+  
   ingress {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  // connectivity to ubuntu mirrors is required to run `apt-get update` and `apt-get install apache2`
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -54,7 +74,7 @@ resource "aws_instance" "web" {
   subnet_id              = aws_subnet.subnet-sg.id
 
   tags = {
-    Name = "ec2-terraform-web"
+    Name        = "ec2-terraform-web"
     environment = "educacionit"
   }
 

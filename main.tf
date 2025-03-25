@@ -20,6 +20,7 @@ resource "aws_instance" "web" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.web-sg.id]
+  subnet_id              = aws_subnet.subnet.id
 
   tags = {
     Name = "ec2-terraform-web"
@@ -45,7 +46,7 @@ resource "aws_vpc" "vpc-sg" {
 resource "aws_subnet" "subnet-sg" {
   vpc_id                  = aws_vpc.vpc-sg.id
   cidr_block              = "10.0.1.0/24"
-  availability_zone       = "us-west-2a"
+  availability_zone       = "us-west-2b"
   map_public_ip_on_launch = true
 }
 

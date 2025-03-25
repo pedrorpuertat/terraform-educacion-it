@@ -36,7 +36,21 @@ resource "aws_instance" "web" {
               EOF
 }
 
+resource "aws_vpc" "vpc-sg" {
+  cidr_block = "10.0.0.0/16"
+  enable_dns_support = true
+  enable_dns_hostnames = true
+}
+
+resource "aws_subnet" "subnet-sg" {
+  vpc_id                  = aws_vpc.vpc-sg.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "us-west-2a"
+  map_public_ip_on_launch = true
+}
+
 resource "aws_security_group" "web-sg" {
+ vpc_id = aws_vpc.vpc-sg.id
   name = "${random_pet.sg.id}-sg-educacion-it"
   ingress {
     from_port   = 8080

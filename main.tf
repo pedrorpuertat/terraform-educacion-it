@@ -85,12 +85,12 @@ resource "aws_instance" "web" {
     environment = "educacionit"
   }
 
-  user_data = <<-EOF
+user_data = <<-EOF
               #!/bin/bash
-              apt-get update
-              apt-get install -y apache2
-              echo "Hello World" > /var/www/html/index.html
-              systemctl restart apache2
+              sudo apt-get update
+              sudo apt-get install -y apache2
+              echo "Hello World" | sudo tee /var/www/html/index.html
+              sudo systemctl restart apache2
               EOF
 }
 

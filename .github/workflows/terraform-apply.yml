@@ -18,7 +18,7 @@ jobs:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
     permissions: # granular permissions
-      # so GitHub can check out this repo using the default github.token
+      # so GitHub can check out this repo using the default github.toke
       contents: read
     steps:
       - name: Checkout

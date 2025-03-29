@@ -15,7 +15,7 @@ jobs:
     name: "Terraform Plan"
     runs-on: ubuntu-latest
     permissions:
-      # so GitHub can check out this repo using the default github.token
+      # so GitHub can check out this repo using the default github.toke
       contents: read
       pull-requests: write
     steps:
